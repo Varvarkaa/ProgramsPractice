@@ -1,0 +1,39 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp5
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] numb = { 1, 2, 3, 4 };
+            int res = numb.Sum(x => x%2);
+            Console.WriteLine(res);
+
+            string[] word = { "hello", "my", "friends" };
+            res = word.Sum(x => x.Length);
+            Console.WriteLine(res);
+             
+
+            Example[] ex = new Example[3];
+            for (int i = 0; i < 3; i++)
+            {
+                ex[i] = new Example(i);
+            }
+            res = ex.Sum(x => x.Num) ;
+
+
+            bool f1 = word.Any(x => x.Length % 3 == 0);
+            Console.WriteLine(f1);
+            bool f2 = word.Any(x => x.Length % 3 >1);
+            Console.WriteLine(f2);
+
+            int[] wL = word.Select(x => x.Length).ToArray();
+
+        }
+    }
+}
