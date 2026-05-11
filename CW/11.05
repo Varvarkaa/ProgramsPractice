@@ -1,0 +1,71 @@
+using System.Xml.Serialization;
+
+namespace ConsoleApp1
+{
+    public class School
+    {
+        private string _name;
+        private int _mark;
+        public string Name => _name;
+        public int Mark => _mark;
+        public School(string name, int mark)
+        {
+            _name = name;
+            _mark = mark;
+        }
+    }
+    public class SchoolDTO
+    {
+        public int Mark { get; set; }
+        public string Name { get; set; }
+        public SchoolDTO() { }
+        public SchoolDTO(string name, int mark)
+        {
+            Name = name;
+            Mark = mark;
+        }
+        public SchoolDTO(School school)
+        {
+            Name =school.Name;
+            Mark = school.Mark;
+        }
+    }
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            School s1 = new School("Barbi", 5);
+            SchoolDTO sd1 = new SchoolDTO(s1);
+
+            string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            string filePath = Path.Combine(folderPath, "SCHOOLS.xml");
+
+            var serializer = new XmlSerializer(typeof(SchoolDTO));
+            using (var writer = new StreamWriter(filePath))
+            {
+                serializer.Serialize(writer, sd1);
+            }
+            SchoolDTO sd2;
+            using (var reader = new StreamReader(filePath))
+            {
+                sd2 = (SchoolDTO)serializer.Deserialize(reader);
+            }
+            School s2 = new School(sd2.Name, sd2.Mark);
+
+            if (CompareSchools(s1,s2))
+            {
+                Console.WriteLine("Success");
+            }
+            else
+            {
+                Console.WriteLine("Something's wrong");
+            }
+        }
+        private static bool CompareSchools(School s1, School s2)
+        {
+            if (s1.Name != s2.Name) return false;
+            if (s1.Mark != s2.Mark) return false;
+            return true;
+        }
+    }
+}
